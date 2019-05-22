@@ -10,21 +10,25 @@ typedef struct __mavlink_battery_status_t {
  int16_t temperature; /*< [cdegC] Temperature of the battery. INT16_MAX for unknown temperature.*/
  uint16_t voltages[10]; /*< [mV] Battery voltage of cells. Cells above the valid cell count for this battery should have the UINT16_MAX value.*/
  int16_t current_battery; /*< [cA] Battery current, -1: autopilot does not measure the current*/
+ int16_t current_generator; /*< [cA] Generator current, in 10*milliamperes (1 = 10 milliampere), -1: autopilot does not measure the generator current*/
+ int16_t current_rotor; /*< [cA] Rotor current, in 10*milliamperes (1 = 10 milliampere), -1: autopilot does not measure the rotor current*/
+ int16_t fuel_level; /*< [ml] Fuel level, in mililiters (1 = 1 mililiter), -1: autopilot does not measure fuel level*/
  uint8_t id; /*<  Battery ID*/
  uint8_t battery_function; /*<  Function of the battery*/
  uint8_t type; /*<  Type (chemistry) of the battery*/
  int8_t battery_remaining; /*< [%] Remaining battery energy. Values: [0-100], -1: autopilot does not estimate the remaining battery.*/
+ int8_t throttle_percentage; /*< [%] Throttle percentage being applied: (0%: 0, 100%: 100), -1: autopilot does not measure throttle percentage*/
  int32_t time_remaining; /*< [s] Remaining battery time, 0: autopilot does not provide remaining battery time estimate*/
  uint8_t charge_state; /*<  State for extent of discharge, provided by autopilot for warning or external reactions*/
 }) mavlink_battery_status_t;
 
-#define MAVLINK_MSG_ID_BATTERY_STATUS_LEN 41
-#define MAVLINK_MSG_ID_BATTERY_STATUS_MIN_LEN 36
-#define MAVLINK_MSG_ID_147_LEN 41
-#define MAVLINK_MSG_ID_147_MIN_LEN 36
+#define MAVLINK_MSG_ID_BATTERY_STATUS_LEN 48
+#define MAVLINK_MSG_ID_BATTERY_STATUS_MIN_LEN 43
+#define MAVLINK_MSG_ID_147_LEN 48
+#define MAVLINK_MSG_ID_147_MIN_LEN 43
 
-#define MAVLINK_MSG_ID_BATTERY_STATUS_CRC 154
-#define MAVLINK_MSG_ID_147_CRC 154
+#define MAVLINK_MSG_ID_BATTERY_STATUS_CRC 40
+#define MAVLINK_MSG_ID_147_CRC 40
 
 #define MAVLINK_MSG_BATTERY_STATUS_FIELD_VOLTAGES_LEN 10
 
@@ -32,35 +36,43 @@ typedef struct __mavlink_battery_status_t {
 #define MAVLINK_MESSAGE_INFO_BATTERY_STATUS { \
     147, \
     "BATTERY_STATUS", \
-    11, \
-    {  { "id", NULL, MAVLINK_TYPE_UINT8_T, 0, 32, offsetof(mavlink_battery_status_t, id) }, \
-         { "battery_function", NULL, MAVLINK_TYPE_UINT8_T, 0, 33, offsetof(mavlink_battery_status_t, battery_function) }, \
-         { "type", NULL, MAVLINK_TYPE_UINT8_T, 0, 34, offsetof(mavlink_battery_status_t, type) }, \
+    15, \
+    {  { "id", NULL, MAVLINK_TYPE_UINT8_T, 0, 38, offsetof(mavlink_battery_status_t, id) }, \
+         { "battery_function", NULL, MAVLINK_TYPE_UINT8_T, 0, 39, offsetof(mavlink_battery_status_t, battery_function) }, \
+         { "type", NULL, MAVLINK_TYPE_UINT8_T, 0, 40, offsetof(mavlink_battery_status_t, type) }, \
          { "temperature", NULL, MAVLINK_TYPE_INT16_T, 0, 8, offsetof(mavlink_battery_status_t, temperature) }, \
          { "voltages", NULL, MAVLINK_TYPE_UINT16_T, 10, 10, offsetof(mavlink_battery_status_t, voltages) }, \
          { "current_battery", NULL, MAVLINK_TYPE_INT16_T, 0, 30, offsetof(mavlink_battery_status_t, current_battery) }, \
          { "current_consumed", NULL, MAVLINK_TYPE_INT32_T, 0, 0, offsetof(mavlink_battery_status_t, current_consumed) }, \
          { "energy_consumed", NULL, MAVLINK_TYPE_INT32_T, 0, 4, offsetof(mavlink_battery_status_t, energy_consumed) }, \
-         { "battery_remaining", NULL, MAVLINK_TYPE_INT8_T, 0, 35, offsetof(mavlink_battery_status_t, battery_remaining) }, \
-         { "time_remaining", NULL, MAVLINK_TYPE_INT32_T, 0, 36, offsetof(mavlink_battery_status_t, time_remaining) }, \
-         { "charge_state", NULL, MAVLINK_TYPE_UINT8_T, 0, 40, offsetof(mavlink_battery_status_t, charge_state) }, \
+         { "battery_remaining", NULL, MAVLINK_TYPE_INT8_T, 0, 41, offsetof(mavlink_battery_status_t, battery_remaining) }, \
+         { "current_generator", NULL, MAVLINK_TYPE_INT16_T, 0, 32, offsetof(mavlink_battery_status_t, current_generator) }, \
+         { "current_rotor", NULL, MAVLINK_TYPE_INT16_T, 0, 34, offsetof(mavlink_battery_status_t, current_rotor) }, \
+         { "fuel_level", NULL, MAVLINK_TYPE_INT16_T, 0, 36, offsetof(mavlink_battery_status_t, fuel_level) }, \
+         { "throttle_percentage", NULL, MAVLINK_TYPE_INT8_T, 0, 42, offsetof(mavlink_battery_status_t, throttle_percentage) }, \
+         { "time_remaining", NULL, MAVLINK_TYPE_INT32_T, 0, 43, offsetof(mavlink_battery_status_t, time_remaining) }, \
+         { "charge_state", NULL, MAVLINK_TYPE_UINT8_T, 0, 47, offsetof(mavlink_battery_status_t, charge_state) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_BATTERY_STATUS { \
     "BATTERY_STATUS", \
-    11, \
-    {  { "id", NULL, MAVLINK_TYPE_UINT8_T, 0, 32, offsetof(mavlink_battery_status_t, id) }, \
-         { "battery_function", NULL, MAVLINK_TYPE_UINT8_T, 0, 33, offsetof(mavlink_battery_status_t, battery_function) }, \
-         { "type", NULL, MAVLINK_TYPE_UINT8_T, 0, 34, offsetof(mavlink_battery_status_t, type) }, \
+    15, \
+    {  { "id", NULL, MAVLINK_TYPE_UINT8_T, 0, 38, offsetof(mavlink_battery_status_t, id) }, \
+         { "battery_function", NULL, MAVLINK_TYPE_UINT8_T, 0, 39, offsetof(mavlink_battery_status_t, battery_function) }, \
+         { "type", NULL, MAVLINK_TYPE_UINT8_T, 0, 40, offsetof(mavlink_battery_status_t, type) }, \
          { "temperature", NULL, MAVLINK_TYPE_INT16_T, 0, 8, offsetof(mavlink_battery_status_t, temperature) }, \
          { "voltages", NULL, MAVLINK_TYPE_UINT16_T, 10, 10, offsetof(mavlink_battery_status_t, voltages) }, \
          { "current_battery", NULL, MAVLINK_TYPE_INT16_T, 0, 30, offsetof(mavlink_battery_status_t, current_battery) }, \
          { "current_consumed", NULL, MAVLINK_TYPE_INT32_T, 0, 0, offsetof(mavlink_battery_status_t, current_consumed) }, \
          { "energy_consumed", NULL, MAVLINK_TYPE_INT32_T, 0, 4, offsetof(mavlink_battery_status_t, energy_consumed) }, \
-         { "battery_remaining", NULL, MAVLINK_TYPE_INT8_T, 0, 35, offsetof(mavlink_battery_status_t, battery_remaining) }, \
-         { "time_remaining", NULL, MAVLINK_TYPE_INT32_T, 0, 36, offsetof(mavlink_battery_status_t, time_remaining) }, \
-         { "charge_state", NULL, MAVLINK_TYPE_UINT8_T, 0, 40, offsetof(mavlink_battery_status_t, charge_state) }, \
+         { "battery_remaining", NULL, MAVLINK_TYPE_INT8_T, 0, 41, offsetof(mavlink_battery_status_t, battery_remaining) }, \
+         { "current_generator", NULL, MAVLINK_TYPE_INT16_T, 0, 32, offsetof(mavlink_battery_status_t, current_generator) }, \
+         { "current_rotor", NULL, MAVLINK_TYPE_INT16_T, 0, 34, offsetof(mavlink_battery_status_t, current_rotor) }, \
+         { "fuel_level", NULL, MAVLINK_TYPE_INT16_T, 0, 36, offsetof(mavlink_battery_status_t, fuel_level) }, \
+         { "throttle_percentage", NULL, MAVLINK_TYPE_INT8_T, 0, 42, offsetof(mavlink_battery_status_t, throttle_percentage) }, \
+         { "time_remaining", NULL, MAVLINK_TYPE_INT32_T, 0, 43, offsetof(mavlink_battery_status_t, time_remaining) }, \
+         { "charge_state", NULL, MAVLINK_TYPE_UINT8_T, 0, 47, offsetof(mavlink_battery_status_t, charge_state) }, \
          } \
 }
 #endif
@@ -80,12 +92,16 @@ typedef struct __mavlink_battery_status_t {
  * @param current_consumed [mAh] Consumed charge, -1: autopilot does not provide consumption estimate
  * @param energy_consumed [hJ] Consumed energy, -1: autopilot does not provide energy consumption estimate
  * @param battery_remaining [%] Remaining battery energy. Values: [0-100], -1: autopilot does not estimate the remaining battery.
+ * @param current_generator [cA] Generator current, in 10*milliamperes (1 = 10 milliampere), -1: autopilot does not measure the generator current
+ * @param current_rotor [cA] Rotor current, in 10*milliamperes (1 = 10 milliampere), -1: autopilot does not measure the rotor current
+ * @param fuel_level [ml] Fuel level, in mililiters (1 = 1 mililiter), -1: autopilot does not measure fuel level
+ * @param throttle_percentage [%] Throttle percentage being applied: (0%: 0, 100%: 100), -1: autopilot does not measure throttle percentage
  * @param time_remaining [s] Remaining battery time, 0: autopilot does not provide remaining battery time estimate
  * @param charge_state  State for extent of discharge, provided by autopilot for warning or external reactions
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_battery_status_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               uint8_t id, uint8_t battery_function, uint8_t type, int16_t temperature, const uint16_t *voltages, int16_t current_battery, int32_t current_consumed, int32_t energy_consumed, int8_t battery_remaining, int32_t time_remaining, uint8_t charge_state)
+                               uint8_t id, uint8_t battery_function, uint8_t type, int16_t temperature, const uint16_t *voltages, int16_t current_battery, int32_t current_consumed, int32_t energy_consumed, int8_t battery_remaining, int16_t current_generator, int16_t current_rotor, int16_t fuel_level, int8_t throttle_percentage, int32_t time_remaining, uint8_t charge_state)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_BATTERY_STATUS_LEN];
@@ -93,12 +109,16 @@ static inline uint16_t mavlink_msg_battery_status_pack(uint8_t system_id, uint8_
     _mav_put_int32_t(buf, 4, energy_consumed);
     _mav_put_int16_t(buf, 8, temperature);
     _mav_put_int16_t(buf, 30, current_battery);
-    _mav_put_uint8_t(buf, 32, id);
-    _mav_put_uint8_t(buf, 33, battery_function);
-    _mav_put_uint8_t(buf, 34, type);
-    _mav_put_int8_t(buf, 35, battery_remaining);
-    _mav_put_int32_t(buf, 36, time_remaining);
-    _mav_put_uint8_t(buf, 40, charge_state);
+    _mav_put_int16_t(buf, 32, current_generator);
+    _mav_put_int16_t(buf, 34, current_rotor);
+    _mav_put_int16_t(buf, 36, fuel_level);
+    _mav_put_uint8_t(buf, 38, id);
+    _mav_put_uint8_t(buf, 39, battery_function);
+    _mav_put_uint8_t(buf, 40, type);
+    _mav_put_int8_t(buf, 41, battery_remaining);
+    _mav_put_int8_t(buf, 42, throttle_percentage);
+    _mav_put_int32_t(buf, 43, time_remaining);
+    _mav_put_uint8_t(buf, 47, charge_state);
     _mav_put_uint16_t_array(buf, 10, voltages, 10);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_BATTERY_STATUS_LEN);
 #else
@@ -107,10 +127,14 @@ static inline uint16_t mavlink_msg_battery_status_pack(uint8_t system_id, uint8_
     packet.energy_consumed = energy_consumed;
     packet.temperature = temperature;
     packet.current_battery = current_battery;
+    packet.current_generator = current_generator;
+    packet.current_rotor = current_rotor;
+    packet.fuel_level = fuel_level;
     packet.id = id;
     packet.battery_function = battery_function;
     packet.type = type;
     packet.battery_remaining = battery_remaining;
+    packet.throttle_percentage = throttle_percentage;
     packet.time_remaining = time_remaining;
     packet.charge_state = charge_state;
     mav_array_memcpy(packet.voltages, voltages, sizeof(uint16_t)*10);
@@ -136,13 +160,17 @@ static inline uint16_t mavlink_msg_battery_status_pack(uint8_t system_id, uint8_
  * @param current_consumed [mAh] Consumed charge, -1: autopilot does not provide consumption estimate
  * @param energy_consumed [hJ] Consumed energy, -1: autopilot does not provide energy consumption estimate
  * @param battery_remaining [%] Remaining battery energy. Values: [0-100], -1: autopilot does not estimate the remaining battery.
+ * @param current_generator [cA] Generator current, in 10*milliamperes (1 = 10 milliampere), -1: autopilot does not measure the generator current
+ * @param current_rotor [cA] Rotor current, in 10*milliamperes (1 = 10 milliampere), -1: autopilot does not measure the rotor current
+ * @param fuel_level [ml] Fuel level, in mililiters (1 = 1 mililiter), -1: autopilot does not measure fuel level
+ * @param throttle_percentage [%] Throttle percentage being applied: (0%: 0, 100%: 100), -1: autopilot does not measure throttle percentage
  * @param time_remaining [s] Remaining battery time, 0: autopilot does not provide remaining battery time estimate
  * @param charge_state  State for extent of discharge, provided by autopilot for warning or external reactions
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_battery_status_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   uint8_t id,uint8_t battery_function,uint8_t type,int16_t temperature,const uint16_t *voltages,int16_t current_battery,int32_t current_consumed,int32_t energy_consumed,int8_t battery_remaining,int32_t time_remaining,uint8_t charge_state)
+                                   uint8_t id,uint8_t battery_function,uint8_t type,int16_t temperature,const uint16_t *voltages,int16_t current_battery,int32_t current_consumed,int32_t energy_consumed,int8_t battery_remaining,int16_t current_generator,int16_t current_rotor,int16_t fuel_level,int8_t throttle_percentage,int32_t time_remaining,uint8_t charge_state)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_BATTERY_STATUS_LEN];
@@ -150,12 +178,16 @@ static inline uint16_t mavlink_msg_battery_status_pack_chan(uint8_t system_id, u
     _mav_put_int32_t(buf, 4, energy_consumed);
     _mav_put_int16_t(buf, 8, temperature);
     _mav_put_int16_t(buf, 30, current_battery);
-    _mav_put_uint8_t(buf, 32, id);
-    _mav_put_uint8_t(buf, 33, battery_function);
-    _mav_put_uint8_t(buf, 34, type);
-    _mav_put_int8_t(buf, 35, battery_remaining);
-    _mav_put_int32_t(buf, 36, time_remaining);
-    _mav_put_uint8_t(buf, 40, charge_state);
+    _mav_put_int16_t(buf, 32, current_generator);
+    _mav_put_int16_t(buf, 34, current_rotor);
+    _mav_put_int16_t(buf, 36, fuel_level);
+    _mav_put_uint8_t(buf, 38, id);
+    _mav_put_uint8_t(buf, 39, battery_function);
+    _mav_put_uint8_t(buf, 40, type);
+    _mav_put_int8_t(buf, 41, battery_remaining);
+    _mav_put_int8_t(buf, 42, throttle_percentage);
+    _mav_put_int32_t(buf, 43, time_remaining);
+    _mav_put_uint8_t(buf, 47, charge_state);
     _mav_put_uint16_t_array(buf, 10, voltages, 10);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_BATTERY_STATUS_LEN);
 #else
@@ -164,10 +196,14 @@ static inline uint16_t mavlink_msg_battery_status_pack_chan(uint8_t system_id, u
     packet.energy_consumed = energy_consumed;
     packet.temperature = temperature;
     packet.current_battery = current_battery;
+    packet.current_generator = current_generator;
+    packet.current_rotor = current_rotor;
+    packet.fuel_level = fuel_level;
     packet.id = id;
     packet.battery_function = battery_function;
     packet.type = type;
     packet.battery_remaining = battery_remaining;
+    packet.throttle_percentage = throttle_percentage;
     packet.time_remaining = time_remaining;
     packet.charge_state = charge_state;
     mav_array_memcpy(packet.voltages, voltages, sizeof(uint16_t)*10);
@@ -188,7 +224,7 @@ static inline uint16_t mavlink_msg_battery_status_pack_chan(uint8_t system_id, u
  */
 static inline uint16_t mavlink_msg_battery_status_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_battery_status_t* battery_status)
 {
-    return mavlink_msg_battery_status_pack(system_id, component_id, msg, battery_status->id, battery_status->battery_function, battery_status->type, battery_status->temperature, battery_status->voltages, battery_status->current_battery, battery_status->current_consumed, battery_status->energy_consumed, battery_status->battery_remaining, battery_status->time_remaining, battery_status->charge_state);
+    return mavlink_msg_battery_status_pack(system_id, component_id, msg, battery_status->id, battery_status->battery_function, battery_status->type, battery_status->temperature, battery_status->voltages, battery_status->current_battery, battery_status->current_consumed, battery_status->energy_consumed, battery_status->battery_remaining, battery_status->current_generator, battery_status->current_rotor, battery_status->fuel_level, battery_status->throttle_percentage, battery_status->time_remaining, battery_status->charge_state);
 }
 
 /**
@@ -202,7 +238,7 @@ static inline uint16_t mavlink_msg_battery_status_encode(uint8_t system_id, uint
  */
 static inline uint16_t mavlink_msg_battery_status_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_battery_status_t* battery_status)
 {
-    return mavlink_msg_battery_status_pack_chan(system_id, component_id, chan, msg, battery_status->id, battery_status->battery_function, battery_status->type, battery_status->temperature, battery_status->voltages, battery_status->current_battery, battery_status->current_consumed, battery_status->energy_consumed, battery_status->battery_remaining, battery_status->time_remaining, battery_status->charge_state);
+    return mavlink_msg_battery_status_pack_chan(system_id, component_id, chan, msg, battery_status->id, battery_status->battery_function, battery_status->type, battery_status->temperature, battery_status->voltages, battery_status->current_battery, battery_status->current_consumed, battery_status->energy_consumed, battery_status->battery_remaining, battery_status->current_generator, battery_status->current_rotor, battery_status->fuel_level, battery_status->throttle_percentage, battery_status->time_remaining, battery_status->charge_state);
 }
 
 /**
@@ -218,12 +254,16 @@ static inline uint16_t mavlink_msg_battery_status_encode_chan(uint8_t system_id,
  * @param current_consumed [mAh] Consumed charge, -1: autopilot does not provide consumption estimate
  * @param energy_consumed [hJ] Consumed energy, -1: autopilot does not provide energy consumption estimate
  * @param battery_remaining [%] Remaining battery energy. Values: [0-100], -1: autopilot does not estimate the remaining battery.
+ * @param current_generator [cA] Generator current, in 10*milliamperes (1 = 10 milliampere), -1: autopilot does not measure the generator current
+ * @param current_rotor [cA] Rotor current, in 10*milliamperes (1 = 10 milliampere), -1: autopilot does not measure the rotor current
+ * @param fuel_level [ml] Fuel level, in mililiters (1 = 1 mililiter), -1: autopilot does not measure fuel level
+ * @param throttle_percentage [%] Throttle percentage being applied: (0%: 0, 100%: 100), -1: autopilot does not measure throttle percentage
  * @param time_remaining [s] Remaining battery time, 0: autopilot does not provide remaining battery time estimate
  * @param charge_state  State for extent of discharge, provided by autopilot for warning or external reactions
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_battery_status_send(mavlink_channel_t chan, uint8_t id, uint8_t battery_function, uint8_t type, int16_t temperature, const uint16_t *voltages, int16_t current_battery, int32_t current_consumed, int32_t energy_consumed, int8_t battery_remaining, int32_t time_remaining, uint8_t charge_state)
+static inline void mavlink_msg_battery_status_send(mavlink_channel_t chan, uint8_t id, uint8_t battery_function, uint8_t type, int16_t temperature, const uint16_t *voltages, int16_t current_battery, int32_t current_consumed, int32_t energy_consumed, int8_t battery_remaining, int16_t current_generator, int16_t current_rotor, int16_t fuel_level, int8_t throttle_percentage, int32_t time_remaining, uint8_t charge_state)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_BATTERY_STATUS_LEN];
@@ -231,12 +271,16 @@ static inline void mavlink_msg_battery_status_send(mavlink_channel_t chan, uint8
     _mav_put_int32_t(buf, 4, energy_consumed);
     _mav_put_int16_t(buf, 8, temperature);
     _mav_put_int16_t(buf, 30, current_battery);
-    _mav_put_uint8_t(buf, 32, id);
-    _mav_put_uint8_t(buf, 33, battery_function);
-    _mav_put_uint8_t(buf, 34, type);
-    _mav_put_int8_t(buf, 35, battery_remaining);
-    _mav_put_int32_t(buf, 36, time_remaining);
-    _mav_put_uint8_t(buf, 40, charge_state);
+    _mav_put_int16_t(buf, 32, current_generator);
+    _mav_put_int16_t(buf, 34, current_rotor);
+    _mav_put_int16_t(buf, 36, fuel_level);
+    _mav_put_uint8_t(buf, 38, id);
+    _mav_put_uint8_t(buf, 39, battery_function);
+    _mav_put_uint8_t(buf, 40, type);
+    _mav_put_int8_t(buf, 41, battery_remaining);
+    _mav_put_int8_t(buf, 42, throttle_percentage);
+    _mav_put_int32_t(buf, 43, time_remaining);
+    _mav_put_uint8_t(buf, 47, charge_state);
     _mav_put_uint16_t_array(buf, 10, voltages, 10);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_BATTERY_STATUS, buf, MAVLINK_MSG_ID_BATTERY_STATUS_MIN_LEN, MAVLINK_MSG_ID_BATTERY_STATUS_LEN, MAVLINK_MSG_ID_BATTERY_STATUS_CRC);
 #else
@@ -245,10 +289,14 @@ static inline void mavlink_msg_battery_status_send(mavlink_channel_t chan, uint8
     packet.energy_consumed = energy_consumed;
     packet.temperature = temperature;
     packet.current_battery = current_battery;
+    packet.current_generator = current_generator;
+    packet.current_rotor = current_rotor;
+    packet.fuel_level = fuel_level;
     packet.id = id;
     packet.battery_function = battery_function;
     packet.type = type;
     packet.battery_remaining = battery_remaining;
+    packet.throttle_percentage = throttle_percentage;
     packet.time_remaining = time_remaining;
     packet.charge_state = charge_state;
     mav_array_memcpy(packet.voltages, voltages, sizeof(uint16_t)*10);
@@ -264,7 +312,7 @@ static inline void mavlink_msg_battery_status_send(mavlink_channel_t chan, uint8
 static inline void mavlink_msg_battery_status_send_struct(mavlink_channel_t chan, const mavlink_battery_status_t* battery_status)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_battery_status_send(chan, battery_status->id, battery_status->battery_function, battery_status->type, battery_status->temperature, battery_status->voltages, battery_status->current_battery, battery_status->current_consumed, battery_status->energy_consumed, battery_status->battery_remaining, battery_status->time_remaining, battery_status->charge_state);
+    mavlink_msg_battery_status_send(chan, battery_status->id, battery_status->battery_function, battery_status->type, battery_status->temperature, battery_status->voltages, battery_status->current_battery, battery_status->current_consumed, battery_status->energy_consumed, battery_status->battery_remaining, battery_status->current_generator, battery_status->current_rotor, battery_status->fuel_level, battery_status->throttle_percentage, battery_status->time_remaining, battery_status->charge_state);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_BATTERY_STATUS, (const char *)battery_status, MAVLINK_MSG_ID_BATTERY_STATUS_MIN_LEN, MAVLINK_MSG_ID_BATTERY_STATUS_LEN, MAVLINK_MSG_ID_BATTERY_STATUS_CRC);
 #endif
@@ -278,7 +326,7 @@ static inline void mavlink_msg_battery_status_send_struct(mavlink_channel_t chan
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_battery_status_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint8_t id, uint8_t battery_function, uint8_t type, int16_t temperature, const uint16_t *voltages, int16_t current_battery, int32_t current_consumed, int32_t energy_consumed, int8_t battery_remaining, int32_t time_remaining, uint8_t charge_state)
+static inline void mavlink_msg_battery_status_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint8_t id, uint8_t battery_function, uint8_t type, int16_t temperature, const uint16_t *voltages, int16_t current_battery, int32_t current_consumed, int32_t energy_consumed, int8_t battery_remaining, int16_t current_generator, int16_t current_rotor, int16_t fuel_level, int8_t throttle_percentage, int32_t time_remaining, uint8_t charge_state)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
@@ -286,12 +334,16 @@ static inline void mavlink_msg_battery_status_send_buf(mavlink_message_t *msgbuf
     _mav_put_int32_t(buf, 4, energy_consumed);
     _mav_put_int16_t(buf, 8, temperature);
     _mav_put_int16_t(buf, 30, current_battery);
-    _mav_put_uint8_t(buf, 32, id);
-    _mav_put_uint8_t(buf, 33, battery_function);
-    _mav_put_uint8_t(buf, 34, type);
-    _mav_put_int8_t(buf, 35, battery_remaining);
-    _mav_put_int32_t(buf, 36, time_remaining);
-    _mav_put_uint8_t(buf, 40, charge_state);
+    _mav_put_int16_t(buf, 32, current_generator);
+    _mav_put_int16_t(buf, 34, current_rotor);
+    _mav_put_int16_t(buf, 36, fuel_level);
+    _mav_put_uint8_t(buf, 38, id);
+    _mav_put_uint8_t(buf, 39, battery_function);
+    _mav_put_uint8_t(buf, 40, type);
+    _mav_put_int8_t(buf, 41, battery_remaining);
+    _mav_put_int8_t(buf, 42, throttle_percentage);
+    _mav_put_int32_t(buf, 43, time_remaining);
+    _mav_put_uint8_t(buf, 47, charge_state);
     _mav_put_uint16_t_array(buf, 10, voltages, 10);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_BATTERY_STATUS, buf, MAVLINK_MSG_ID_BATTERY_STATUS_MIN_LEN, MAVLINK_MSG_ID_BATTERY_STATUS_LEN, MAVLINK_MSG_ID_BATTERY_STATUS_CRC);
 #else
@@ -300,10 +352,14 @@ static inline void mavlink_msg_battery_status_send_buf(mavlink_message_t *msgbuf
     packet->energy_consumed = energy_consumed;
     packet->temperature = temperature;
     packet->current_battery = current_battery;
+    packet->current_generator = current_generator;
+    packet->current_rotor = current_rotor;
+    packet->fuel_level = fuel_level;
     packet->id = id;
     packet->battery_function = battery_function;
     packet->type = type;
     packet->battery_remaining = battery_remaining;
+    packet->throttle_percentage = throttle_percentage;
     packet->time_remaining = time_remaining;
     packet->charge_state = charge_state;
     mav_array_memcpy(packet->voltages, voltages, sizeof(uint16_t)*10);
@@ -324,7 +380,7 @@ static inline void mavlink_msg_battery_status_send_buf(mavlink_message_t *msgbuf
  */
 static inline uint8_t mavlink_msg_battery_status_get_id(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint8_t(msg,  32);
+    return _MAV_RETURN_uint8_t(msg,  38);
 }
 
 /**
@@ -334,7 +390,7 @@ static inline uint8_t mavlink_msg_battery_status_get_id(const mavlink_message_t*
  */
 static inline uint8_t mavlink_msg_battery_status_get_battery_function(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint8_t(msg,  33);
+    return _MAV_RETURN_uint8_t(msg,  39);
 }
 
 /**
@@ -344,7 +400,7 @@ static inline uint8_t mavlink_msg_battery_status_get_battery_function(const mavl
  */
 static inline uint8_t mavlink_msg_battery_status_get_type(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint8_t(msg,  34);
+    return _MAV_RETURN_uint8_t(msg,  40);
 }
 
 /**
@@ -404,7 +460,47 @@ static inline int32_t mavlink_msg_battery_status_get_energy_consumed(const mavli
  */
 static inline int8_t mavlink_msg_battery_status_get_battery_remaining(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_int8_t(msg,  35);
+    return _MAV_RETURN_int8_t(msg,  41);
+}
+
+/**
+ * @brief Get field current_generator from battery_status message
+ *
+ * @return [cA] Generator current, in 10*milliamperes (1 = 10 milliampere), -1: autopilot does not measure the generator current
+ */
+static inline int16_t mavlink_msg_battery_status_get_current_generator(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  32);
+}
+
+/**
+ * @brief Get field current_rotor from battery_status message
+ *
+ * @return [cA] Rotor current, in 10*milliamperes (1 = 10 milliampere), -1: autopilot does not measure the rotor current
+ */
+static inline int16_t mavlink_msg_battery_status_get_current_rotor(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  34);
+}
+
+/**
+ * @brief Get field fuel_level from battery_status message
+ *
+ * @return [ml] Fuel level, in mililiters (1 = 1 mililiter), -1: autopilot does not measure fuel level
+ */
+static inline int16_t mavlink_msg_battery_status_get_fuel_level(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  36);
+}
+
+/**
+ * @brief Get field throttle_percentage from battery_status message
+ *
+ * @return [%] Throttle percentage being applied: (0%: 0, 100%: 100), -1: autopilot does not measure throttle percentage
+ */
+static inline int8_t mavlink_msg_battery_status_get_throttle_percentage(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int8_t(msg,  42);
 }
 
 /**
@@ -414,7 +510,7 @@ static inline int8_t mavlink_msg_battery_status_get_battery_remaining(const mavl
  */
 static inline int32_t mavlink_msg_battery_status_get_time_remaining(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_int32_t(msg,  36);
+    return _MAV_RETURN_int32_t(msg,  43);
 }
 
 /**
@@ -424,7 +520,7 @@ static inline int32_t mavlink_msg_battery_status_get_time_remaining(const mavlin
  */
 static inline uint8_t mavlink_msg_battery_status_get_charge_state(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint8_t(msg,  40);
+    return _MAV_RETURN_uint8_t(msg,  47);
 }
 
 /**
@@ -441,10 +537,14 @@ static inline void mavlink_msg_battery_status_decode(const mavlink_message_t* ms
     battery_status->temperature = mavlink_msg_battery_status_get_temperature(msg);
     mavlink_msg_battery_status_get_voltages(msg, battery_status->voltages);
     battery_status->current_battery = mavlink_msg_battery_status_get_current_battery(msg);
+    battery_status->current_generator = mavlink_msg_battery_status_get_current_generator(msg);
+    battery_status->current_rotor = mavlink_msg_battery_status_get_current_rotor(msg);
+    battery_status->fuel_level = mavlink_msg_battery_status_get_fuel_level(msg);
     battery_status->id = mavlink_msg_battery_status_get_id(msg);
     battery_status->battery_function = mavlink_msg_battery_status_get_battery_function(msg);
     battery_status->type = mavlink_msg_battery_status_get_type(msg);
     battery_status->battery_remaining = mavlink_msg_battery_status_get_battery_remaining(msg);
+    battery_status->throttle_percentage = mavlink_msg_battery_status_get_throttle_percentage(msg);
     battery_status->time_remaining = mavlink_msg_battery_status_get_time_remaining(msg);
     battery_status->charge_state = mavlink_msg_battery_status_get_charge_state(msg);
 #else
