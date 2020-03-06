@@ -245,6 +245,16 @@
         <param index="5">Empty.</param>
         <param index="6">Empty.</param>
         <param index="7">Empty.</param>
+      </entry>
+      <entry value="41001" name="MAV_CMD_FLAP_ACTION">
+        <description>Flap action, for flap_auto configured servos.</description>
+        <param index="1">3 auto flap, 0 flaps retracted, 1 first flap position, 2 second flap position</param>
+        <param index="2">Empty,</param>
+        <param index="3">Empty.</param>
+        <param index="4">Empty.</param>
+        <param index="5">Empty.</param>
+        <param index="6">Empty.</param>
+        <param index="7">Empty.</param>
       </entry>    
     </enum>
     <!-- AP_Limits Enums -->

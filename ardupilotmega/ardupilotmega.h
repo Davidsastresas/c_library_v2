@@ -210,6 +210,7 @@ typedef enum MAV_CMD
    MAV_CMD_USER_4=31013, /* User defined command. Ground Station will not show the Vehicle as flying through this item. Example: MAV_CMD_DO_SET_PARAMETER item. |User defined| User defined| User defined| User defined| User defined| User defined| User defined|  */
    MAV_CMD_USER_5=31014, /* User defined command. Ground Station will not show the Vehicle as flying through this item. Example: MAV_CMD_DO_SET_PARAMETER item. |User defined| User defined| User defined| User defined| User defined| User defined| User defined|  */
    MAV_CMD_WHEEL_BRAKE=41000, /* Activate/deactivate wheel brakes. |1 activate, 0 deactivate.| Empty,| Empty.| Empty.| Empty.| Empty.| Empty.|  */
+   MAV_CMD_FLAP_ACTION=41001, /* Flap action, for flap_auto configured servos. |3 auto flap, 0 flaps retracted, 1 first flap position, 2 second flap position| Empty,| Empty.| Empty.| Empty.| Empty.| Empty.|  */
    MAV_CMD_POWER_OFF_INITIATED=42000, /* A system wide power-off event has been initiated. |Empty.| Empty.| Empty.| Empty.| Empty.| Empty.| Empty.|  */
    MAV_CMD_SOLO_BTN_FLY_CLICK=42001, /* FLY button has been clicked. |Empty.| Empty.| Empty.| Empty.| Empty.| Empty.| Empty.|  */
    MAV_CMD_SOLO_BTN_FLY_HOLD=42002, /* FLY button has been held for 1.5 seconds. |Takeoff altitude.| Empty.| Empty.| Empty.| Empty.| Empty.| Empty.|  */
