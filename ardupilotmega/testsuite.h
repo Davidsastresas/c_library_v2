@@ -3581,6 +3581,67 @@ static void mavlink_test_arys_acc(uint8_t system_id, uint8_t component_id, mavli
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 }
 
+static void mavlink_test_ar_efi_telemetry(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
+{
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+    mavlink_status_t *status = mavlink_get_channel_status(MAVLINK_COMM_0);
+        if ((status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) && MAVLINK_MSG_ID_AR_EFI_TELEMETRY >= 256) {
+            return;
+        }
+#endif
+    mavlink_message_t msg;
+        uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+        uint16_t i;
+    mavlink_ar_efi_telemetry_t packet_in = {
+        17.0,45.0,73.0,17859,17963,18067,18171,18275
+    };
+    mavlink_ar_efi_telemetry_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.fuel_instant = packet_in.fuel_instant;
+        packet1.fuel_consumed = packet_in.fuel_consumed;
+        packet1.fuel_remaining = packet_in.fuel_remaining;
+        packet1.coolant = packet_in.coolant;
+        packet1.rpm = packet_in.rpm;
+        packet1.barometer = packet_in.barometer;
+        packet1.tps = packet_in.tps;
+        packet1.batteryVoltage = packet_in.batteryVoltage;
+        
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_AR_EFI_TELEMETRY_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_AR_EFI_TELEMETRY_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_ar_efi_telemetry_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_ar_efi_telemetry_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_ar_efi_telemetry_pack(system_id, component_id, &msg , packet1.coolant , packet1.rpm , packet1.barometer , packet1.tps , packet1.batteryVoltage , packet1.fuel_instant , packet1.fuel_consumed , packet1.fuel_remaining );
+    mavlink_msg_ar_efi_telemetry_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_ar_efi_telemetry_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.coolant , packet1.rpm , packet1.barometer , packet1.tps , packet1.batteryVoltage , packet1.fuel_instant , packet1.fuel_consumed , packet1.fuel_remaining );
+    mavlink_msg_ar_efi_telemetry_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+        mavlink_msg_to_send_buffer(buffer, &msg);
+        for (i=0; i<mavlink_msg_get_send_buffer_length(&msg); i++) {
+            comm_send_ch(MAVLINK_COMM_0, buffer[i]);
+        }
+    mavlink_msg_ar_efi_telemetry_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+        
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_ar_efi_telemetry_send(MAVLINK_COMM_1 , packet1.coolant , packet1.rpm , packet1.barometer , packet1.tps , packet1.batteryVoltage , packet1.fuel_instant , packet1.fuel_consumed , packet1.fuel_remaining );
+    mavlink_msg_ar_efi_telemetry_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+}
+
 static void mavlink_test_ardupilotmega(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
 {
     mavlink_test_sensor_offsets(system_id, component_id, last_msg);
@@ -3643,6 +3704,7 @@ static void mavlink_test_ardupilotmega(uint8_t system_id, uint8_t component_id, 
     mavlink_test_esc_telemetry_5_to_8(system_id, component_id, last_msg);
     mavlink_test_esc_telemetry_9_to_12(system_id, component_id, last_msg);
     mavlink_test_arys_acc(system_id, component_id, last_msg);
+    mavlink_test_ar_efi_telemetry(system_id, component_id, last_msg);
 }
 
 #ifdef __cplusplus

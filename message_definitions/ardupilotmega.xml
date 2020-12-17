@@ -1614,5 +1614,16 @@
       <field type="float" name="grndacc" units="m/s/s">groundspeed acceleration.</field>
       <field type="float" name="arspdacc" units="m/s/s">airspeed acceleration.</field>
     </message>
+    <message id="11100" name="AR_EFI_TELEMETRY">
+      <description>Arys efi telemetry</description>
+      <field type="int16_t" name="coolant" units="dc degree F">coolant degree, deci Farenheit</field>./waf
+      <field type="uint16_t" name="rpm" units="rpm">RPM.</field>
+      <field type="int16_t" name="barometer" units="kPa">barometric pressure measured by ecu.</field>
+      <field type="int16_t" name="tps" units="%">throttle position.</field>
+      <field type="int16_t" name="batteryVoltage" units="V">battery voltage.</field>
+      <field type="float" name="fuel_instant" units="NK">fuel instant consumption.</field>
+      <field type="float" name="fuel_consumed" units="NK">fuel consumed.</field>
+      <field type="float" name="fuel_remaining" units="NK">fuel remaining.</field>
+    </message>
   </messages>
 </mavlink>
