@@ -1616,7 +1616,7 @@
     </message>
     <message id="11100" name="AR_EFI_TELEMETRY">
       <description>Arys efi telemetry</description>
-      <field type="int16_t" name="coolant" units="dc degree F">coolant degree, deci Farenheit</field>./waf
+      <field type="int16_t" name="coolant" units="dc degree F">coolant degree, deci Farenheit</field>
       <field type="uint16_t" name="rpm" units="rpm">RPM.</field>
       <field type="int16_t" name="barometer" units="kPa">barometric pressure measured by ecu.</field>
       <field type="int16_t" name="tps" units="%">throttle position.</field>
