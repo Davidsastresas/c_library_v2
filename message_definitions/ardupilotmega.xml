@@ -1589,5 +1589,13 @@
       <field type="uint16_t[4]" name="rpm" units="rpm">RPM (eRPM).</field>
       <field type="uint16_t[4]" name="count">count of telemetry packets received (wraps at 65535).</field>
     </message>
+    <message id="11050" name="ERM_TRACKER">
+      <description>ERM tracker feedback</description>
+      <field type="uint8_t" name="Status" units="NA">Status.</field>
+      <field type="uint16_t" name="x0" units="coordinate">x0.</field>
+      <field type="uint16_t" name="x1" units="coordinate">x1.</field>
+      <field type="uint16_t" name="y0" units="coordinate">y0.</field>
+      <field type="uint16_t" name="y1" units="coordinate">y1.</field>
+    </message>
   </messages>
 </mavlink>
