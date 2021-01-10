@@ -4881,3 +4881,78 @@ TEST(ardupilotmega_interop, AR_EFI_TELEMETRY)
 #endif
 }
 #endif
+
+TEST(ardupilotmega, AR_ADC)
+{
+    mavlink::mavlink_message_t msg;
+    mavlink::MsgMap map1(msg);
+    mavlink::MsgMap map2(msg);
+
+    mavlink::ardupilotmega::msg::AR_ADC packet_in{};
+    packet_in.status = 53;
+    packet_in.adc0 = 17.0;
+    packet_in.adc1 = 45.0;
+    packet_in.adc2 = 73.0;
+    packet_in.adc3 = 101.0;
+
+    mavlink::ardupilotmega::msg::AR_ADC packet1{};
+    mavlink::ardupilotmega::msg::AR_ADC packet2{};
+
+    packet1 = packet_in;
+
+    //std::cout << packet1.to_yaml() << std::endl;
+
+    packet1.serialize(map1);
+
+    mavlink::mavlink_finalize_message(&msg, 1, 1, packet1.MIN_LENGTH, packet1.LENGTH, packet1.CRC_EXTRA);
+
+    packet2.deserialize(map2);
+
+    EXPECT_EQ(packet1.status, packet2.status);
+    EXPECT_EQ(packet1.adc0, packet2.adc0);
+    EXPECT_EQ(packet1.adc1, packet2.adc1);
+    EXPECT_EQ(packet1.adc2, packet2.adc2);
+    EXPECT_EQ(packet1.adc3, packet2.adc3);
+}
+
+#ifdef TEST_INTEROP
+TEST(ardupilotmega_interop, AR_ADC)
+{
+    mavlink_message_t msg;
+
+    // to get nice print
+    memset(&msg, 0, sizeof(msg));
+
+    mavlink_ar_adc_t packet_c {
+         17.0, 45.0, 73.0, 101.0, 53
+    };
+
+    mavlink::ardupilotmega::msg::AR_ADC packet_in{};
+    packet_in.status = 53;
+    packet_in.adc0 = 17.0;
+    packet_in.adc1 = 45.0;
+    packet_in.adc2 = 73.0;
+    packet_in.adc3 = 101.0;
+
+    mavlink::ardupilotmega::msg::AR_ADC packet2{};
+
+    mavlink_msg_ar_adc_encode(1, 1, &msg, &packet_c);
+
+    // simulate message-handling callback
+    [&packet2](const mavlink_message_t *cmsg) {
+        MsgMap map2(cmsg);
+
+        packet2.deserialize(map2);
+    } (&msg);
+
+    EXPECT_EQ(packet_in.status, packet2.status);
+    EXPECT_EQ(packet_in.adc0, packet2.adc0);
+    EXPECT_EQ(packet_in.adc1, packet2.adc1);
+    EXPECT_EQ(packet_in.adc2, packet2.adc2);
+    EXPECT_EQ(packet_in.adc3, packet2.adc3);
+
+#ifdef PRINT_MSG
+    PRINT_MSG(msg);
+#endif
+}
+#endif

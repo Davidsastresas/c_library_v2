@@ -3,7 +3,7 @@
 
 #define MAVLINK_MSG_ID_AR_EFI_TELEMETRY 11100
 
-MAVPACKED(
+
 typedef struct __mavlink_ar_efi_telemetry_t {
  float fuel_instant; /*< [NK] fuel instant consumption.*/
  float fuel_consumed; /*< [NK] fuel consumed.*/
@@ -13,7 +13,7 @@ typedef struct __mavlink_ar_efi_telemetry_t {
  int16_t barometer; /*< [kPa] barometric pressure measured by ecu.*/
  int16_t tps; /*< [%] throttle position.*/
  int16_t batteryVoltage; /*< [V] battery voltage.*/
-}) mavlink_ar_efi_telemetry_t;
+} mavlink_ar_efi_telemetry_t;
 
 #define MAVLINK_MSG_ID_AR_EFI_TELEMETRY_LEN 22
 #define MAVLINK_MSG_ID_AR_EFI_TELEMETRY_MIN_LEN 22

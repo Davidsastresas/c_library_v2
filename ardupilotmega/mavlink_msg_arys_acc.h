@@ -3,11 +3,11 @@
 
 #define MAVLINK_MSG_ID_ARYS_ACC 11050
 
-MAVPACKED(
+
 typedef struct __mavlink_arys_acc_t {
  float grndacc; /*< [m/s/s] groundspeed acceleration.*/
  float arspdacc; /*< [m/s/s] airspeed acceleration.*/
-}) mavlink_arys_acc_t;
+} mavlink_arys_acc_t;
 
 #define MAVLINK_MSG_ID_ARYS_ACC_LEN 8
 #define MAVLINK_MSG_ID_ARYS_ACC_MIN_LEN 8

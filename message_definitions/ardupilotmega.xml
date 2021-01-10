@@ -1625,5 +1625,13 @@
       <field type="float" name="fuel_consumed" units="NK">fuel consumed.</field>
       <field type="float" name="fuel_remaining" units="NK">fuel remaining.</field>
     </message>
+    <message id="11101" name="AR_ADC">
+      <description>Arys adc ads1115.</description>
+      <field type="uint8_t" name="status">status of adc, 1 ok 0 not ok.</field>
+      <field type="float" name="adc0" units="mV">mv measured.</field>
+      <field type="float" name="adc1" units="mV">mv measured.</field>
+      <field type="float" name="adc2" units="mV">mv measured.</field>
+      <field type="float" name="adc3" units="mV">mv measured.</field>
+    </message>
   </messages>
 </mavlink>
